@@ -1,15 +1,15 @@
 import asyncio
-from re import Match
 
 from aiogram import Bot, Dispatcher, Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from config_reader import config
 
-TOKEN = "1145854936:AAFMrSy-0x7gUKuoD6VmcJcG5XDfYG6e4sI"
+
+bot = Bot(config.token.get_secret_value(), parse_mode="HTML")
 router = Router()
 kolo = r".*(коло|[иі]нтернет|провайдер).*"
-bot = Bot(TOKEN, parse_mode="HTML")
 
 
 @router.message(Command(commands=["start"]))
@@ -19,9 +19,7 @@ async def cmd_start(message: Message) -> None:
 
 @router.message(F.text.lower().regexp(kolo))
 async def ping_kivi(message: Message):
-    # print(message.from_user.full_name, message.chat.title, message.from_user.id)
-    # await message.send_copy(chat_id=7525617)
-    await bot.send_message(chat_id=7525617, text=make_msg(
+    await bot.send_message(chat_id=config.superuser_id, text=make_msg(
                                                 user=message.from_user.full_name,
                                                 chat=message.chat.title,
                                                 text=message.text))
