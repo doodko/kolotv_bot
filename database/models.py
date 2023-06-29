@@ -13,6 +13,7 @@ class Word(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(10))
+    pattern: Mapped[str] = mapped_column(String(20))
 
     def __repr__(self) -> str:
         return f"{self.name}"
@@ -34,7 +35,7 @@ class Match(Base):
 
     id: Mapped[str] = mapped_column(primary_key=True)
     word_id: Mapped[int] = mapped_column(ForeignKey("word.id"))
-    chat_id = Mapped[int] = mapped_column(ForeignKey("chat.id"))
+    chat_id: Mapped[int] = mapped_column(ForeignKey("chat.id"))
     date: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
 
     word: Mapped["Word"] = relationship()
