@@ -12,6 +12,6 @@ async def cmd_start(message: Message) -> None:
     await message.answer(f"Hi, {message.from_user.full_name}!")
 
 
-@router.message()
-async def private_messages_handler(message: Message):
-    await message.answer(text='okay')
+@router.message(Command(commands=["stats"]))
+async def cmd_stats(message: Message):
+    await message.answer(text='here we go!')
