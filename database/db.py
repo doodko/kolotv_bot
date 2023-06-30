@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from config_reader import config
-from models import Base
+from database.models import Base
 
 
 engine = create_engine(config.db)
