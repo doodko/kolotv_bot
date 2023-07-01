@@ -27,3 +27,4 @@ class Utils:
             Word.name).order_by(func.count(Mention.id).desc()).all()
         words_string = '\n'.join([f"{word}: {count}" for word, count in words_counts])
         return words_string
+      

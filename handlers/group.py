@@ -7,6 +7,7 @@ from config_reader import config
 from database.mention_service import MentionService
 from database.word_service import WordService
 
+
 router = Router()
 
 ws = WordService()
