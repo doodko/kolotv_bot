@@ -1,5 +1,3 @@
-import re
-
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -17,12 +15,11 @@ ms = MentionService()
 
 @router.message(F.text.lower().regexp(config.pattern))
 async def ping_kivi(message: Message):
-
     ms.add_new_mention(message)
-
     builder = InlineKeyboardBuilder()
     builder.row(InlineKeyboardButton(text="Jump to message", url=make_msg_link(message)))
-    await bot.send_message(chat_id=config.superuser_id, text=make_msg(message), reply_markup=builder.as_markup())
+
+    await bot.send_message(chat_id=-1001784386726, text=make_msg(message), reply_markup=builder.as_markup())
 
 
 def make_msg(message: Message) -> str:
