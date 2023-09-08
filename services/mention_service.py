@@ -5,7 +5,7 @@ from aiogram.types import Message
 
 from database.db import Session
 from database.models import Mention
-from database.word_service import WordService
+from services.word_service import WordService
 
 
 ws = WordService()
