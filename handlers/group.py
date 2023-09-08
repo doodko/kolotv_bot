@@ -4,8 +4,8 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot import bot
 from config_reader import config
-from database.mention_service import MentionService
-from database.word_service import WordService
+from services.mention_service import MentionService
+from services.word_service import WordService
 
 
 router = Router()
@@ -15,7 +15,7 @@ ms = MentionService()
 
 
 @router.message(F.text.lower().regexp(config.pattern))
-async def ping_kivi(message: Message):
+async def ping_kolo(message: Message):
     ms.add_new_mention(message)
     builder = InlineKeyboardBuilder()
     builder.row(InlineKeyboardButton(text="Jump to message", url=make_msg_link(message)))
