@@ -1,4 +1,4 @@
-# KoloTV Bot Mention Tracking Project Specification
+# KoloTV Mention Tracking Bot - Project Specification
 
 ## Table of Contents
 1. [Introduction](#1-introduction)
@@ -62,7 +62,7 @@ The code includes try-except blocks for error handling within the application.
 Data retention policies and privacy measures are in place to ensure the security and privacy of collected data, especially chat content.
 
 ## 11. Performance Optimization
-The bot uses an asynchronous structure to improve performance, especially when dealing with large volumes of data.
+The bot uses an asynchronous structure to improve performance.
 
 ## 12. Version Control
 The bot code is stored in a private GitHub repository for version control and collaboration among developers.
