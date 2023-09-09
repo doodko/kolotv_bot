@@ -1,7 +1,5 @@
 /.idea
-.env
 /venv/
 __pycache__/
-kolo.db
 /bot_update.sh
 /kolo.service
