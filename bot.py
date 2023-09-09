@@ -3,12 +3,10 @@ import asyncio
 from aiogram import Bot, Dispatcher
 
 from config_reader import config
-from database.utils import Utils
 from handlers import private, group
-
+from services.utils import utils
 
 bot = Bot(config.token.get_secret_value(), parse_mode="HTML")
-utils = Utils()
 
 
 async def main() -> None:

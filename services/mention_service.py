@@ -5,10 +5,7 @@ from aiogram.types import Message
 
 from database.db import Session
 from database.models import Mention
-from services.word_service import WordService
-
-
-ws = WordService()
+from services.word_service import word_service
 
 
 class MentionService:
@@ -16,7 +13,7 @@ class MentionService:
         self.session = session
 
     def add_new_mention(self, message: Message) -> None:
-        for word in ws.get_all_words():
+        for word in word_service.get_all_words():
             if re.search(word.pattern, message.text.lower()):
                 new_mention = Mention(date=datetime.now(),
                                       word_id=word.id,
@@ -32,3 +29,6 @@ class MentionService:
         link = f"https://t.me/c/{chat_id}/{message_id}"
 
         return link
+
+
+mention_service = MentionService()

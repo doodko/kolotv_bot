@@ -29,3 +29,6 @@ class WordService:
         for word in words_list:
             name, pattern = word
             self.add_new_word(name=name, pattern=pattern)
+
+
+word_service = WordService()

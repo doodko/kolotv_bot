@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from database.utils import Utils
+from services.utils import Utils
 
 
 router = Router()

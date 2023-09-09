@@ -4,19 +4,15 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot import bot
 from config_reader import config
-from services.mention_service import MentionService
-from services.word_service import WordService
+from services.mention_service import mention_service
 
 
 router = Router()
 
-ws = WordService()
-ms = MentionService()
-
 
 @router.message(F.text.lower().regexp(config.pattern))
 async def ping_kolo(message: Message):
-    ms.add_new_mention(message)
+    mention_service.add_new_mention(message)
     builder = InlineKeyboardBuilder()
     builder.row(InlineKeyboardButton(text="Jump to message", url=make_msg_link(message)))
 
