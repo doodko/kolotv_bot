@@ -11,11 +11,9 @@ class Settings(BaseSettings):
 
     app_name: str = 'Kolo bot'
     token: SecretStr
-    superuser_id: int
     destination_chat: int
     db: str
     pattern: str
 
 
 config = Settings()
-print(config)
