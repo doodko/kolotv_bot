@@ -11,7 +11,7 @@ class WordService:
         self.session.add(new_word)
         self.session.commit()
 
-    def get_all_words(self):
+    def get_all_words(self) -> list[Word]:
         return self.session.query(Word).all()
 
     def seed_db(self):

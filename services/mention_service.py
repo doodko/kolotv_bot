@@ -4,7 +4,8 @@ from datetime import datetime
 from aiogram.types import Message
 
 from database.db import Session
-from database.models import Mention
+from database.models import Mention, Word
+from services.utils import utils
 from services.word_service import word_service
 
 
@@ -12,23 +13,19 @@ class MentionService:
     def __init__(self, session: Session = Session()):
         self.session = session
 
-    def add_new_mention(self, message: Message) -> None:
-        for word in word_service.get_all_words():
-            if re.search(word.pattern, message.text.lower()):
-                new_mention = Mention(date=datetime.now(),
-                                      word_id=word.id,
-                                      chat_id=message.chat.id,
-                                      link=self.make_msg_link(message=message))
-                self.session.add(new_mention)
-                self.session.commit()
-
     @staticmethod
-    def make_msg_link(message: Message) -> str:
-        chat_id = (message.chat.id + 1000000000000) * -1
-        message_id = message.message_id
-        link = f"https://t.me/c/{chat_id}/{message_id}"
+    def get_mentions_list(message: Message) -> list[Word]:
+        return [word for word in word_service.get_all_words() if re.search(word.pattern, message.text.lower())]
 
-        return link
+    def add_mentions(self, words: list[Word], message: Message) -> None:
+        chat = utils.get_full_chat_id(chat_id=message.chat.id)
+        link = f"https://t.me/c/{chat}/{message.message_id}"
+
+        mentions = [Mention(date=datetime.now(), word_id=word.id,chat_id=message.chat.id, link=link) for word in words]
+
+        self.session.add_all(mentions)
+        self.session.commit()
+
 
 
 mention_service = MentionService()
