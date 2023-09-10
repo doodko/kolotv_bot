@@ -28,5 +28,10 @@ class Utils:
         words_string = '\n'.join([f"{word}: {count}" for word, count in words_counts])
         return words_string
 
+    @staticmethod
+    def get_full_chat_id(chat_id: int) -> int:
+        return (chat_id + 1000000000000) * -1
+
+
 utils = Utils()
       
