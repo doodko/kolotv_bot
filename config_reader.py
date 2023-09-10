@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     token: SecretStr
     destination_chat: int
     db: str
+    pattern: str = ''
+
 
 
 config = Settings()

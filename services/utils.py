@@ -8,13 +8,13 @@ class Utils:
     def __init__(self, session: Session = Session()):
         self.session = session
 
-    def make_pattern(self):
+    def make_pattern(self) -> str:
         with self.session.begin():
             all_patterns = self.session.execute(select(Word.pattern)).scalars().all()
             main_pattern = '|'.join(all_patterns)
             return main_pattern
 
-    def give_statistics(self):
+    def give_statistics(self) -> str:
         chats_count = self.session.query(Mention.chat_id).distinct().count()
         words_counts = self.count_mentions()
         msg = f"За останні 30 днів пошукові слова зустрічались у <b>{chats_count}</b> чатах.\n\n" \
