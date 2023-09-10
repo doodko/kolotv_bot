@@ -4,7 +4,6 @@ from aiogram import Bot, Dispatcher
 
 from config_reader import config
 from handlers import private, group
-from services.utils import utils
 
 
 bot = Bot(config.token.get_secret_value(), parse_mode="HTML")
@@ -21,5 +20,4 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    config.pattern = utils.make_pattern()
     asyncio.run(main())

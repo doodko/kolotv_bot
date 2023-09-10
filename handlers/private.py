@@ -2,13 +2,11 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from services.utils import Utils
+from services.utils import utils
 
 
 router = Router()
 router.message.filter(F.chat.type =='private')
-
-ut = Utils()
 
 
 @router.message(Command(commands=["start"]))
@@ -18,4 +16,4 @@ async def cmd_start(message: Message) -> None:
 
 @router.message(Command(commands=["stats"]))
 async def cmd_stats(message: Message):
-    await message.answer(text=ut.give_statistics())
+    await message.answer(text=utils.give_statistics())
