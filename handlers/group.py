@@ -1,5 +1,3 @@
-import re
-
 from aiogram import Router, F
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, MEMBER
 from aiogram.types import Message, InlineKeyboardButton, ChatMemberUpdated
@@ -10,7 +8,6 @@ from config_reader import config
 from filters.kolo_handler import KoloFilter
 from services.mention_service import mention_service
 from services.utils import utils
-from services.word_service import word_service
 
 
 router = Router()
