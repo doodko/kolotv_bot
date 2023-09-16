@@ -1,7 +1,7 @@
-from sqlalchemy import select, func
+from sqlalchemy import select
 
 from database.db import Session
-from database.models import Word, Mention
+from database.models import Word
 
 
 class Utils:
@@ -14,19 +14,6 @@ class Utils:
             main_pattern = '|'.join(all_patterns)
             return main_pattern
 
-    def give_statistics(self) -> str:
-        chats_count = self.session.query(Mention.chat_id).distinct().count()
-        words_counts = self.count_mentions()
-        msg = f"За останні 30 днів пошукові слова зустрічались у <b>{chats_count}</b> чатах.\n\n" \
-              f"Найчастіше згадують:\n{words_counts}"
-
-        return msg
-
-    def count_mentions(self) -> str:
-        words_counts = self.session.query(Word.name, func.count(Mention.id)).join(Word.mentions).group_by(
-            Word.name).order_by(func.count(Mention.id).desc()).all()
-        words_string = '\n'.join([f"{word}: {count}" for word, count in words_counts])
-        return words_string
 
     @staticmethod
     def get_full_chat_id(chat_id: int) -> int:
