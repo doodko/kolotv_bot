@@ -12,8 +12,7 @@ bot = Bot(config.token.get_secret_value(), parse_mode="HTML")
 
 
 async def main() -> None:
-    logging.basicConfig(level=logging.INFO,
-                        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+    # logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router=private.router)
