@@ -32,3 +32,12 @@ class Mention(Base):
 
     def __repr__(self) -> str:
         return f"{self.date} - {self.mentioned_word}"
+
+class Chat(Base):
+    __tablename__ = 'chat'
+
+    chat_id: Mapped[int] = mapped_column(Integer)
+    chat_name: Mapped[str] = mapped_column(String(50))
+
+    def __repr__(self) -> str:
+        return f"{self.chat_name}"
