@@ -35,7 +35,7 @@ class MentionService:
                     .all())
 
         words_counts = self.count_mentions(months=months)
-        msg = (f"За останні <b>{utils.get_month_string(number=months)}</b> пошукові слова зустрічались "
+        msg = (f"За період <b>{utils.get_month_string(number=months)}</b> пошукові слова зустрічались "
                f"у <b>{len(chats)}</b> чатах.\n\n"
                f"Найчастіше згадують:\n{words_counts}")
 
