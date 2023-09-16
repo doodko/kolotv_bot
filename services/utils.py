@@ -1,7 +1,9 @@
-from sqlalchemy import select, func
+from datetime import timedelta, datetime
+
+from sqlalchemy import select
 
 from database.db import Session
-from database.models import Word, Mention
+from database.models import Word
 
 
 class Utils:
@@ -14,19 +16,26 @@ class Utils:
             main_pattern = '|'.join(all_patterns)
             return main_pattern
 
-    def give_statistics(self) -> str:
-        chats_count = self.session.query(Mention.chat_id).distinct().count()
-        words_counts = self.count_mentions()
-        msg = f"За останні 30 днів пошукові слова зустрічались у <b>{chats_count}</b> чатах.\n\n" \
-              f"Найчастіше згадують:\n{words_counts}"
 
-        return msg
+    @staticmethod
+    def get_full_chat_id(chat_id: int) -> int:
+        return (chat_id + 1000000000000) * -1
 
-    def count_mentions(self) -> str:
-        words_counts = self.session.query(Word.name, func.count(Mention.id)).join(Word.mentions).group_by(
-            Word.name).order_by(func.count(Mention.id).desc()).all()
-        words_string = '\n'.join([f"{word}: {count}" for word, count in words_counts])
-        return words_string
+    @staticmethod
+    def get_month_string(number: int) -> str:
+        if number % 10 == 1 and number % 100 != 11:
+            return f"{number} місяць"
+        elif 2 <= number % 10 <= 4 and (number % 100 < 10 or number % 100 >= 20):
+            return f"{number} місяці"
+        else:
+            return f"{number} місяців"
+
+    @staticmethod
+    def months_ago(months: int) -> datetime:
+        today = datetime.now()
+        days_ago = 365 // 12 * months
+        return today - timedelta(days=days_ago)
+
 
     @staticmethod
     def get_full_chat_id(chat_id: int) -> int:
@@ -34,4 +43,3 @@ class Utils:
 
 
 utils = Utils()
-      

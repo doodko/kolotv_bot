@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from pydantic import BaseModel
 from sqlalchemy import String, ForeignKey, DateTime, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -32,3 +33,16 @@ class Mention(Base):
 
     def __repr__(self) -> str:
         return f"{self.date} - {self.mentioned_word}"
+
+class Chat(Base):
+    __tablename__ = 'chat'
+
+    title: Mapped[str] = mapped_column(String(50))
+
+    def __repr__(self) -> str:
+        return f"{self.title}"
+
+
+class MessageWithChats(BaseModel):
+    message: str
+    chats: list

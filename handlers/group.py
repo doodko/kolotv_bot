@@ -1,5 +1,3 @@
-import re
-
 from aiogram import Router, F
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, MEMBER
 from aiogram.types import Message, InlineKeyboardButton, ChatMemberUpdated
@@ -8,9 +6,9 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot import bot
 from config_reader import config
 from filters.kolo_handler import KoloFilter
+from services.chat_service import chat_service
 from services.mention_service import mention_service
 from services.utils import utils
-from services.word_service import word_service
 
 
 router = Router()
@@ -31,6 +29,7 @@ async def bot_added_as_member(event: ChatMemberUpdated):
 @router.message(KoloFilter())
 async def ping_kolo(message: Message):
     word_list = mention_service.get_mentions_list(message=message)
+    chat_service.create_chat_or_update_title(tg_chat=message.chat)
     mention_service.add_mentions(words=word_list, message=message)
 
     words = ', '.join([mention.name for mention in word_list])

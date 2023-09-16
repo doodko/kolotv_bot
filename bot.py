@@ -1,18 +1,24 @@
 import asyncio
+import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
 
 from config_reader import config
 from handlers import private, group
-
+from services.utils import utils
 
 bot = Bot(config.token.get_secret_value(), parse_mode="HTML")
 
 
 async def main() -> None:
-    dp = Dispatcher()
+    # logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+
+    dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router=private.router)
     dp.include_router(router=group.router)
+
+    config.pattern = utils.make_pattern()
 
     await bot.send_message(chat_id=config.destination_chat, text='Bot has started')
     await bot.delete_webhook(drop_pending_updates=True)
