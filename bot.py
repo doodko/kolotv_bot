@@ -1,6 +1,8 @@
 import asyncio
+import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
 
 from config_reader import config
 from handlers import private, group
@@ -10,7 +12,10 @@ bot = Bot(config.token.get_secret_value(), parse_mode="HTML")
 
 
 async def main() -> None:
-    dp = Dispatcher()
+    logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+
+    dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router=private.router)
     dp.include_router(router=group.router)
 
