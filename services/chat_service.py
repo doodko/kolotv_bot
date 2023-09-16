@@ -23,6 +23,15 @@ class ChatService:
     def get_all_chats(self) -> list[Chat]:
         return self.session.query(Chat).all()
 
+    def get_chat_by_id(self, chat_id: int) -> Chat:
+        return self.session.query(Chat).filter(Chat.id == chat_id).first()
+
+    def get_chat_title(self, chat_id: int) -> str:
+        chat = self.get_chat_by_id(chat_id=chat_id)
+        if not chat:
+            return 'Unknown chat'
+        return chat.title
+
 
 
 chat_service = ChatService()

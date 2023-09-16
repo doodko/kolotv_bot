@@ -1,20 +1,16 @@
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, CallbackQuery
 
 from keyboards.chats_inline_keyboard import chats_keyboard, ChatCallback
 from keyboards.months_inline_keyboard import inline_months_keyboard, StatsPeriod
+from services.chat_service import chat_service
 from services.mention_service import mention_service
 from services.utils import utils
 
 router = Router()
 router.message.filter(F.chat.type =='private')
 
-
-class Stats(StatesGroup):
-    choosing_period = State()
-    choosing_chat = State()
 
 
 @router.message(Command(commands=["start"]))
@@ -40,7 +36,8 @@ async def process_period(query: CallbackQuery, callback_data: StatsPeriod):
 async def process_chat(query: CallbackQuery, callback_data: ChatCallback):
     stats = mention_service.count_mentions_in_chat(chat_id=callback_data.id, months=callback_data.period)
     period_str = utils.get_month_string(number=callback_data.period)
-    text = f"Такі пошукові слова зустрічались у чаті <b>{callback_data.title}</b> за <b>{period_str}</b>:\n\n{stats}"
+    chat_title = chat_service.get_chat_title(chat_id=callback_data.id)
+    text = f"Такі пошукові слова зустрічались у чаті <b>{chat_title}</b> за <b>{period_str}</b>:\n\n{stats}"
 
     await query.message.answer(text=text)
     await query.answer()
