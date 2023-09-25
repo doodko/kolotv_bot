@@ -14,7 +14,11 @@ class Settings(BaseSettings):
     destination_chat: int
     db: str
     pattern: str = ""
+    admins_str: str
 
+    @property
+    def admins(self):
+        return [int(admin) for admin in self.admins_str.split(',')]
 
 
 config = Settings()
