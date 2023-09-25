@@ -1,14 +1,15 @@
+import os
 import re
+import csv
 from datetime import datetime
 
 from aiogram.types import Message
 from sqlalchemy import func
 
 from database.db import Session
-from database.models import Mention, Word, Chat, MessageWithChats
+from database.models import Mention, Word, Chat, MessageWithChats, User
 from services.utils import utils
 from services.word_service import word_service
-
 
 
 class MentionService:
@@ -23,7 +24,14 @@ class MentionService:
         chat = utils.get_full_chat_id(chat_id=message.chat.id)
         link = f"https://t.me/c/{chat}/{message.message_id}"
 
-        mentions = [Mention(date=datetime.now(), word_id=word.id,chat_id=message.chat.id, link=link) for word in words]
+        mentions = [Mention(
+                        date=datetime.now(),
+                        word_id=word.id,
+                        chat_id=message.chat.id,
+                        link=link,
+                        user_id=message.from_user.id,
+                        text=message.text)
+                    for word in words]
 
         self.session.add_all(mentions)
         self.session.commit()
@@ -63,6 +71,21 @@ class MentionService:
 
         words_string = '\n'.join([f"{word}: {count}" for word, count in words_counts])
         return words_string
+
+    def export_mentions_to_csv(self, chat_id: int):
+        export_directory = "files"
+        os.makedirs(export_directory, exist_ok=True)
+        csv_filename = os.path.join(export_directory, f"chat{chat_id}.csv")
+
+        mentions = self.session.query(Mention).filter_by(chat_id=chat_id).all()
+
+        with open(csv_filename, mode='w', newline='', encoding='utf-8') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=';')
+            csv_writer.writerow(["datetime", "user", "text", "link"])
+
+            for mention in mentions:
+                user = self.session.get(User, mention.user_id)
+                csv_writer.writerow([mention.date, user.full_name, mention.text, mention.link])
 
 
 
