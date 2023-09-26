@@ -14,5 +14,4 @@ async def cmd_start(message: Message) -> None:
 
 @router.message()
 async def all_other_messages(message: Message) -> None:
-    print(message.from_user)
     await message.answer("Для зв'язку з підтримкою прохання звертатись в чат-бот: @kolotv_bot")

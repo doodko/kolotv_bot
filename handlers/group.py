@@ -30,9 +30,8 @@ async def bot_added_as_member(event: ChatMemberUpdated):
 @router.message(KoloFilter())
 async def ping_kolo(message: Message):
     word_list = mention_service.get_mentions_list(message=message)
-    print(word_list)
     chat_service.create_chat_or_update_title(tg_chat=message.chat)
-    user_service.create_or_update_user(user=message.from_user)
+    user_service.create_or_update_current_user(user=message.from_user)
     mention_service.add_mentions(words=word_list, message=message)
 
     words = ', '.join([mention.name for mention in word_list])
