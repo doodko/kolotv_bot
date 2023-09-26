@@ -33,7 +33,9 @@ async def process_chat(query: CallbackQuery, callback_data: ChatCallback):
     period_str = utils.get_month_string(number=callback_data.period)
     chat_title = chat_service.get_chat_title(chat_id=callback_data.id)
     text = f"Такі пошукові слова зустрічались у чаті <b>{chat_title}</b> за <b>{period_str}</b>:\n\n{stats}"
-    mention_service.export_mentions_to_csv(chat_id=callback_data.id)
+
+    # todo button for file downloading
+    # mention_service.export_mentions_to_csv(chat_id=callback_data.id)
 
     await query.message.answer(text=text)
     await query.answer()
