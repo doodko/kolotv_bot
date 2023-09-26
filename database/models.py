@@ -26,8 +26,10 @@ class Mention(Base):
 
     date: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     word_id: Mapped[int] = mapped_column(ForeignKey("word.id"))
-    chat_id: Mapped[int] = mapped_column(Integer)
-    link: Mapped[str] = mapped_column(String(25))
+    chat_id: Mapped[int] = mapped_column(ForeignKey("chat.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    text: Mapped[str] = mapped_column(String)
+    link: Mapped[str] = mapped_column(String)
 
     mentioned_word: Mapped["Word"] = relationship(back_populates="mentions")
 
@@ -41,6 +43,16 @@ class Chat(Base):
 
     def __repr__(self) -> str:
         return f"{self.title}"
+
+class User(Base):
+    __tablename__ = 'users'
+
+    full_name: Mapped[str] = mapped_column(String)
+    nickname: Mapped[str] = mapped_column(String)
+
+    def __repr__(self) -> str:
+        return f"{self.full_name if self.full_name else self.id}"
+
 
 
 class MessageWithChats(BaseModel):
