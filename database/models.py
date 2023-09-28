@@ -48,7 +48,7 @@ class User(Base):
     __tablename__ = 'users'
 
     full_name: Mapped[str] = mapped_column(String)
-    nickname: Mapped[str] = mapped_column(String)
+    nickname: Mapped[str] = mapped_column(String, nullable=True)
 
     def __repr__(self) -> str:
         return f"{self.full_name if self.full_name else self.id}"
