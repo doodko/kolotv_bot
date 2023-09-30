@@ -7,15 +7,12 @@ from database.models import Word
 
 
 class Utils:
-    def __init__(self, session: Session = Session()):
-        self.session = session
-
-    def make_pattern(self) -> str:
-        with self.session.begin():
-            all_patterns = self.session.execute(select(Word.pattern)).scalars().all()
+    @staticmethod
+    def make_pattern() -> str:
+        with Session() as session:
+            all_patterns = session.execute(select(Word.pattern)).scalars().all()
             main_pattern = '|'.join(all_patterns)
             return main_pattern
-
 
     @staticmethod
     def get_full_chat_id(chat_id: int) -> int:
@@ -35,11 +32,6 @@ class Utils:
         today = datetime.now()
         days_ago = 365 // 12 * months
         return today - timedelta(days=days_ago)
-
-
-    @staticmethod
-    def get_full_chat_id(chat_id: int) -> int:
-        return (chat_id + 1000000000000) * -1
 
 
 utils = Utils()
