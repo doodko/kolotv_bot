@@ -72,14 +72,14 @@ class MentionService:
         words_string = '\n'.join([f"{word}: {count}" for word, count in words_counts])
         return words_string
 
-    def export_mentions_to_csv(self, chat_id: int):
+    def export_mentions_to_csv(self, chat_id: int) -> str:
         export_directory = "files"
         os.makedirs(export_directory, exist_ok=True)
-        csv_filename = os.path.join(export_directory, f"chat{chat_id}.csv")
+        csv_file_path = os.path.join(export_directory, f"chat{chat_id}.csv")
 
         mentions = self.session.query(Mention).filter_by(chat_id=chat_id).all()
 
-        with open(csv_filename, mode='w', newline='', encoding='utf-8') as csv_file:
+        with open(csv_file_path, mode='w', newline='', encoding='utf-8') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=';')
             csv_writer.writerow(["datetime", "user", "text", "link"])
 
@@ -87,6 +87,7 @@ class MentionService:
                 user = self.session.get(User, mention.user_id)
                 csv_writer.writerow([mention.date, user.full_name, mention.text, mention.link])
 
+        return csv_file_path
 
 
 mention_service = MentionService()
