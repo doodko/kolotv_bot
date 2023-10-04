@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, FSInputFile
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from config_reader import config
 from keyboards.chats_inline_keyboard import chats_keyboard, ChatCallback
@@ -33,10 +34,20 @@ async def process_chat(query: CallbackQuery, callback_data: ChatCallback):
     period_str = utils.get_month_string(number=callback_data.period)
     chat_title = chat_service.get_chat_title(chat_id=callback_data.id)
     text = f"Такі пошукові слова зустрічались у чаті <b>{chat_title}</b> за <b>{period_str}</b>:\n\n{stats}"
-    mention_service.export_mentions_to_csv(chat_id=callback_data.id)
 
-    # todo button for file downloading
-    # mention_service.export_mentions_to_csv(chat_id=callback_data.id)
+    builder = InlineKeyboardBuilder()
+    bttn_text = f"Скачати статистику {chat_title}"
+    builder.add(InlineKeyboardButton(text=bttn_text, callback_data=f"download_{callback_data.id}"))
 
-    await query.message.answer(text=text)
+    await query.message.answer(text=text, reply_markup=builder.as_markup())
+    await query.answer()
+
+
+@router.callback_query(F.data.startswith("download_"))
+async def download_chat_stats(query: CallbackQuery):
+    chat_id = query.data.split("_")[1]
+    filepath = mention_service.export_mentions_to_csv(chat_id=chat_id)
+    file = FSInputFile(path=filepath)
+
+    await query.message.answer_document(document=file)
     await query.answer()
